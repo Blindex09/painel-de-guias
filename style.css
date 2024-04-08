@@ -1,0 +1,48 @@
+/* style.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 10px;
+}
+
+.tab-panel {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.tab-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tab-list li {
+    display: inline-block;
+    margin-right: 10px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.tab-list li:focus, .tab-list li[aria-selected="true"] {
+    outline: none;
+    background-color: #eaeaea;
+}
+
+.tab-content {
+    margin-top: 20px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .tab-list li {
+        display: block; /* Guia em blocos para telas menores */
+        width: 100%;
+        box-sizing: border-box; /* Garante que padding não adicione largura */
+    }
+
+    .tab-content p {
+        font-size: 1.2em; /* Aumenta o tamanho do texto para melhor leitura */
+    }
+}
