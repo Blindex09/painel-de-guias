@@ -2,42 +2,40 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painéis de Guias Acessíveis</title>
     <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-
 <main>
-    <section aria-labelledby="autoPanelHeading">
-        <h2 id="autoPanelHeading">Painel de Guias Automático</h2>
-        <div class="tab-panel auto" id="autoPanel">
+    <section aria-labelledby="autoTabPanelLabel">
+        <h2 id="autoTabPanelLabel">Painel de Guias Automático</h2>
+        <div class="tab-panel" id="autoTabPanel">
             <ul class="tab-list" role="tablist">
-                <li role="tab" tabindex="0" aria-controls="autoTab1" aria-selected="true">Guia Auto 1</li>
-                <li role="tab" tabindex="-1" aria-controls="autoTab2" aria-selected="false">Guia Auto 2</li>
-                <li role="tab" tabindex="-1" aria-controls="autoTab3" aria-selected="false">Guia Auto 3</li>
+                <li role="tab" aria-controls="autoTab1Content" tabindex="0">Guia Auto 1</li>
+                <li role="tab" aria-controls="autoTab2Content" tabindex="-1">Guia Auto 2</li>
+                <li role="tab" aria-controls="autoTab3Content" tabindex="-1">Guia Auto 3</li>
             </ul>
-            <div id="autoTab1" class="tab-content" role="tabpanel"><p>Conteúdo interessante da Guia Auto 1. Aqui vai uma descrição mais detalhada.</p></div>
-            <div id="autoTab2" class="tab-content" role="tabpanel" hidden><p>Explorando o conteúdo da Guia Auto 2. Mais informações e detalhes relevantes.</p></div>
-            <div id="autoTab3" class="tab-content" role="tabpanel" hidden><p>Dados e fatos da Guia Auto 3. Um aprofundamento no tópico.</p></div>
+            <article id="autoTab1Content" class="tab-content"><p>Conteúdo Auto 1</p></article>
+            <article id="autoTab2Content" class="tab-content" hidden><p>Conteúdo Auto 2</p></article>
+            <article id="autoTab3Content" class="tab-content" hidden><p>Conteúdo Auto 3</p></article>
         </div>
     </section>
 
-    <section aria-labelledby="manualPanelHeading">
-        <h2 id="manualPanelHeading">Painel de Guias Manual</h2>
-        <div class="tab-panel manual" id="manualPanel">
+    <section aria-labelledby="manualTabPanelLabel">
+        <h2 id="manualTabPanelLabel">Painel de Guias Manual</h2>
+        <div class="tab-panel" id="manualTabPanel">
             <ul class="tab-list" role="tablist">
-                <li role="tab" tabindex="0" aria-controls="manualTab1" aria-selected="true">Guia Manual 1</li>
-                <li role="tab" tabindex="-1" aria-controls="manualTab2" aria-selected="false">Guia Manual 2</li>
-                <li role="tab" tabindex="-1" aria-controls="manualTab3" aria-selected="false">Guia Manual 3</li>
+                <li role="tab" aria-controls="manualTab1Content" tabindex="0">Guia Manual 1</li>
+                <li role="tab" aria-controls="manualTab2Content" tabindex="-1">Guia Manual 2</li>
+                <li role="tab" aria-controls="manualTab3Content" tabindex="-1">Guia Manual 3</li>
             </ul>
-            <div id="manualTab1" class="tab-content" role="tabpanel" hidden><p>Conteúdo da Guia Manual 1. Descrição extensa sobre o tema abordado.</p></div>
-            <div id="manualTab2" class="tab-content" role="tabpanel" hidden><p>Informações da Guia Manual 2. Detalhes e análises pertinentes.</p></div>
-            <div id="manualTab3" class="tab-content" role="tabpanel" hidden><p>Visão geral da Guia Manual 3. Conteúdo rico e informativo.</p></div>
+            <article id="manualTab1Content" class="tab-content" hidden><p>Conteúdo Manual 1</p></article>
+            <article id="manualTab2Content" class="tab-content" hidden><p>Conteúdo Manual 2</p></article>
+            <article id="manualTab3Content" class="tab-content" hidden><p>Conteúdo Manual 3</p></article>
         </div>
     </section>
 </main>
-
 <script src="script.js"></script>
 </body>
 </html>

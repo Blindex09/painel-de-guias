@@ -1,89 +1,54 @@
-// script.js
 document.addEventListener('DOMContentLoaded', () => {
-    setupTabs('.auto', true); // Configuração do painel automático
-    setupManualTabs('.manual'); // Configuração corrigida do painel manual
+    setupTabs('#autoTabPanel', true); // Configuração para guias automáticas
+    setupTabs('#manualTabPanel', false); // Configuração para guias manuais
 });
 
-function setupTabs(panelSelector, isAuto) {
-    const panel = document.querySelector(panelSelector);
+function setupTabs(panelId, isAuto) {
+    const panel = document.querySelector(panelId);
     const tabs = panel.querySelectorAll('[role="tab"]');
     const tabList = panel.querySelector('.tab-list');
 
-    tabList.addEventListener('keydown', e => {
-        const currentTab = tabList.querySelector('[tabindex="0"]');
-        let index = Array.prototype.indexOf.call(tabs, currentTab);
-        let dir = null;
-
-        if (e.key === 'ArrowLeft') { dir = -1; }
-        else if (e.key === 'ArrowRight') { dir = 1; }
-
-        if (dir !== null) {
-            e.preventDefault();
-            index = (index + dir + tabs.length) % tabs.length;
-            tabs[index].focus();
-            tabs[index].setAttribute('aria-selected', 'true');
-            currentTab.setAttribute('aria-selected', 'false');
-
-            if (isAuto) {
-                changeTabFocus(tabs, index);
-                showTabPanel(tabs[index]);
-            }
-        }
-    });
-
+    tabList.addEventListener('keydown', e => navigateTabs(e, tabs, isAuto));
     tabs.forEach(tab => {
-        tab.addEventListener('focus', () => {
-            if (isAuto) {
-                showTabPanel(tab);
-            }
-        });
+        // Adiciona suporte tanto para clique quanto para toque
+        tab.addEventListener('click', e => handleInteraction(e, tab, tabs, isAuto));
+        tab.addEventListener('touchstart', e => handleInteraction(e, tab, tabs, isAuto));
     });
 }
 
-function setupManualTabs(panelSelector) {
-    const panel = document.querySelector(panelSelector);
-    const tabs = panel.querySelectorAll('[role="tab"]');
-    const tabList = panel.querySelector('.tab-list');
+function navigateTabs(e, tabs, isAuto) {
+    let newIndex, dir;
+    const currentTab = e.target;
+    const currentIndex = Array.from(tabs).indexOf(currentTab);
 
-    tabList.addEventListener('keydown', e => {
-        const currentTab = tabList.querySelector('[tabindex="0"]');
-        let index = Array.prototype.indexOf.call(tabs, currentTab);
+    if (e.key === 'ArrowLeft') dir = -1;
+    else if (e.key === 'ArrowRight') dir = 1;
 
-        if (['ArrowLeft', 'ArrowRight'].includes(e.key)) {
-            let dir = e.key === 'ArrowLeft' ? -1 : 1;
-            e.preventDefault();
-            index = (index + dir + tabs.length) % tabs.length;
-            tabs[index].focus();
-            tabs[index].setAttribute('aria-selected', 'true');
-            currentTab.setAttribute('aria-selected', 'false');
-            changeTabFocus(tabs, index); // Ajuste para manter a consistência com o foco
-        } else if (e.key === 'Enter') {
-            e.preventDefault();
-            if (!tabs[index].hasAttribute('aria-selected') || tabs[index].getAttribute('aria-selected') === 'false') {
-                changeTabFocus(tabs, index);
-            }
-            showTabPanel(currentTab, true); // Mover o foco para o conteúdo da guia
+    if (dir !== undefined) {
+        newIndex = (currentIndex + dir + tabs.length) % tabs.length;
+        e.preventDefault();
+        tabs[newIndex].focus();
+        if (isAuto) selectTab(tabs[newIndex], tabs, isAuto);
+    } else if (e.key === 'Enter' && !isAuto) {
+        selectTab(currentTab, tabs, isAuto);
+    }
+}
+
+function handleInteraction(e, tab, tabs, isAuto) {
+    e.preventDefault(); // Previne o comportamento padrão para toque e clique
+    selectTab(tab, tabs, isAuto);
+}
+
+function selectTab(selectedTab, tabs, isAuto) {
+    tabs.forEach(tab => {
+        const isSelected = tab === selectedTab;
+        tab.setAttribute('aria-selected', isSelected);
+        const panel = document.getElementById(tab.getAttribute('aria-controls'));
+        panel.style.display = isSelected ? 'block' : 'none';
+        if (isSelected && !isAuto) {
+            // Mover o foco apenas se for necessário no modo manual
+            panel.setAttribute('tabindex', '-1');
+            panel.focus();
         }
     });
-}
-
-function changeTabFocus(tabs, newIndex) {
-    tabs.forEach((tab, index) => {
-        tab.tabIndex = index === newIndex ? 0 : -1;
-        tab.setAttribute('aria-selected', index === newIndex ? 'true' : 'false');
-    });
-}
-
-function showTabPanel(tab, moveFocus = false) {
-    const panelId = tab.getAttribute('aria-controls');
-    const panel = document.getElementById(panelId);
-    tab.closest('.tab-panel').querySelectorAll('.tab-content').forEach(p => {
-        p.hidden = true;
-    });
-    panel.hidden = false;
-
-    if (moveFocus) {
-        panel.setAttribute('tabindex', '-1');
-        panel.focus();
-    }
 }

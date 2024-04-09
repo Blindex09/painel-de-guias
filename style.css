@@ -1,48 +1,62 @@
-/* style.css */
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 10px;
+    margin: 20px;
 }
 
 .tab-panel {
-    margin-bottom: 20px;
     border: 1px solid #ccc;
+    margin-bottom: 20px;
     padding: 10px;
 }
 
 .tab-list {
-    list-style: none;
     padding: 0;
     margin: 0;
+    list-style: none;
 }
 
 .tab-list li {
     display: inline-block;
-    margin-right: 10px;
-    padding: 5px 10px;
-    border: 1px solid #ccc;
+    margin-right: 5px;
+    padding: 10px;
     cursor: pointer;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    min-width: 48px;
+    min-height: 48px;
+    text-align: center;
+    line-height: 1.5;
+    transition: background-color 0.3s; /* Feedback visual suave para interação */
 }
 
-.tab-list li:focus, .tab-list li[aria-selected="true"] {
-    outline: none;
+.tab-list li[aria-selected="true"] {
     background-color: #eaeaea;
+    border-bottom: 1px solid white; /* Estilo para destacar a guia ativa */
+}
+
+.tab-list li:focus, .tab-list li:hover, .tab-list li:active {
+    outline: 2px solid blue; /* Melhora a visibilidade do foco */
+    background-color: #ddd; /* Feedback de interação */
 }
 
 .tab-content {
-    margin-top: 20px;
+    display: none;
+    padding: 10px 0;
+    opacity: 0; /* Começa invisível para transições suaves */
+    transition: opacity 0.3s ease; /* Transição suave para mostrar o conteúdo */
 }
 
-/* Responsividade */
+.tab-content[role="tabpanel"]:not([hidden]) {
+    display: block;
+    opacity: 1; /* Torna o conteúdo visível suavemente */
+}
+
+/* Responsividade para melhor visualização em dispositivos móveis */
 @media (max-width: 768px) {
     .tab-list li {
-        display: block; /* Guia em blocos para telas menores */
+        display: block; /* As guias são dispostas verticalmente */
         width: 100%;
-        box-sizing: border-box; /* Garante que padding não adicione largura */
-    }
-
-    .tab-content p {
-        font-size: 1.2em; /* Aumenta o tamanho do texto para melhor leitura */
+        box-sizing: border-box;
+        margin-right: 0; /* Ajuste da margem para layout de bloco */
     }
 }
