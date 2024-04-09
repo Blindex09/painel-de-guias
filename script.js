@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     setupTabs('#autoTabPanel', true); // Configuração para guias automáticas
     setupTabs('#manualTabPanel', false); // Configuração para guias manuais
+    // Ativa a primeira guia de cada painel automaticamente
+    activateFirstTab('#autoTabPanel');
+    activateFirstTab('#manualTabPanel');
 });
 
 function setupTabs(panelId, isAuto) {
@@ -10,10 +13,8 @@ function setupTabs(panelId, isAuto) {
 
     tabList.addEventListener('keydown', e => navigateTabs(e, tabs, isAuto));
     tabs.forEach(tab => {
-        // Atualiza para lidar com eventos de toque e cliques de forma adequada
         const selectTabFunction = () => selectTab(tab, tabs, isAuto);
         tab.addEventListener('click', selectTabFunction);
-        // Muda para 'touchend' para melhor compatibilidade no iOS
         tab.addEventListener('touchend', e => {
             e.preventDefault(); // Previne o evento de clique subsequente
             selectTabFunction();
@@ -46,14 +47,19 @@ function selectTab(selectedTab, tabs, isAuto) {
         const panelId = tab.getAttribute('aria-controls');
         const panel = document.getElementById(panelId);
         panel.style.display = isSelected ? 'block' : 'none';
-        if (isSelected) {
-            if (!isAuto) {
-                // Mover o foco para o conteúdo da guia ativa no modo manual
-                panel.setAttribute('tabindex', '-1');
-                panel.focus();
-            }
+        if (isSelected && !isAuto) {
+            panel.setAttribute('tabindex', '-1');
+            panel.focus();
         } else {
             panel.setAttribute('hidden', 'true');
         }
     });
+}
+
+function activateFirstTab(panelId) {
+    const panel = document.querySelector(panelId);
+    const firstTab = panel.querySelector('[role="tab"]');
+    if (firstTab) {
+        firstTab.click(); // Simula um clique na primeira guia para ativar seu conteúdo
+    }
 }
