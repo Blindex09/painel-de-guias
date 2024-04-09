@@ -10,9 +10,14 @@ function setupTabs(panelId, isAuto) {
 
     tabList.addEventListener('keydown', e => navigateTabs(e, tabs, isAuto));
     tabs.forEach(tab => {
-        // Adiciona suporte tanto para clique quanto para toque
-        tab.addEventListener('click', e => handleInteraction(e, tab, tabs, isAuto));
-        tab.addEventListener('touchstart', e => handleInteraction(e, tab, tabs, isAuto));
+        // Atualiza para lidar com eventos de toque e cliques de forma adequada
+        const selectTabFunction = () => selectTab(tab, tabs, isAuto);
+        tab.addEventListener('click', selectTabFunction);
+        // Muda para 'touchend' para melhor compatibilidade no iOS
+        tab.addEventListener('touchend', e => {
+            e.preventDefault(); // Previne o evento de clique subsequente
+            selectTabFunction();
+        });
     });
 }
 
@@ -34,21 +39,21 @@ function navigateTabs(e, tabs, isAuto) {
     }
 }
 
-function handleInteraction(e, tab, tabs, isAuto) {
-    e.preventDefault(); // Previne o comportamento padrão para toque e clique
-    selectTab(tab, tabs, isAuto);
-}
-
 function selectTab(selectedTab, tabs, isAuto) {
     tabs.forEach(tab => {
         const isSelected = tab === selectedTab;
-        tab.setAttribute('aria-selected', isSelected);
-        const panel = document.getElementById(tab.getAttribute('aria-controls'));
+        tab.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+        const panelId = tab.getAttribute('aria-controls');
+        const panel = document.getElementById(panelId);
         panel.style.display = isSelected ? 'block' : 'none';
-        if (isSelected && !isAuto) {
-            // Mover o foco apenas se for necessário no modo manual
-            panel.setAttribute('tabindex', '-1');
-            panel.focus();
+        if (isSelected) {
+            if (!isAuto) {
+                // Mover o foco para o conteúdo da guia ativa no modo manual
+                panel.setAttribute('tabindex', '-1');
+                panel.focus();
+            }
+        } else {
+            panel.setAttribute('hidden', 'true');
         }
     });
 }
